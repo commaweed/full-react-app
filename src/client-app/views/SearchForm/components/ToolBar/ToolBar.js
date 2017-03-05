@@ -3,10 +3,13 @@ import AutoComplete from 'material-ui/AutoComplete';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
-import {orange500, blue500} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import ContentClear from 'material-ui/svg-icons/content/clear';
+
+import ResetButton from '../ResetButton';
+import ColorLookup from '../ColorLookup';
 
 class ToolBar extends Component {
 
@@ -27,7 +30,7 @@ class ToolBar extends Component {
       this.props.onExpandChange(isInputChecked);
    }
 
-   handleResetClick(event) {
+   handleSearchTermReset() {
       document.getElementById('search-term-tf').value = null;
    }
 
@@ -37,14 +40,18 @@ class ToolBar extends Component {
       }
    }
 
+   handleColorReset() {
+      console.log('handleColorReset');
+   }
+
    render() {
 
       const styles = {
          floatingLabelStyle: {
-            color: orange500,
+            color: this.props.muiTheme.palette.primary1Color,
          },
          floatingLabelFocusStyle: {
-            color: blue500,
+            color: this.props.muiTheme.palette.accent1Color,
          },
          actionSearchStyles: {
             marginRight: "5px",
@@ -54,8 +61,9 @@ class ToolBar extends Component {
          },
          toolBarStyles: {
          },
-         autoCompleteStyles: {
-            paddingLeft: "5px"
+         resetButtonStyles: {
+            padding: 0,
+            margin: 0
          }
       };
 
@@ -73,17 +81,9 @@ class ToolBar extends Component {
       return (
          <Toolbar>
             <ToolbarGroup firstChild={true} style={{width: "95%"}}>
-               <AutoComplete
-                  floatingLabelText="Color"
-                  floatingLabelStyle={styles.floatingLabelStyle}
-                  floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
-                  filter={AutoComplete.fuzzyFilter}
-                  dataSource={colors}
-                  maxSearchResults={5}
-                  openOnFocus={true}
-                  style={styles.autoCompleteStyles}
-               />
-               <ActionSearch style={styles.actionSearchStyles}/>
+               <ResetButton onResetClicked={this.handleColorReset.bind(this)}/>
+               <ColorLookup />
+               <ResetButton onResetClicked={this.handleSearchTermReset.bind(this)}/>
                <TextField
                   floatingLabelText="Search Term"
                   floatingLabelStyle={styles.floatingLabelStyle}
@@ -92,13 +92,7 @@ class ToolBar extends Component {
                   id='search-term-tf'
                   onKeyUp={this.handleSearchTermKeyUp.bind(this)}
                />
-               <IconButton
-                  tooltip="Reset Search Term"
-                  tooltipPosition="bottom-right"
-                  onClick={this.handleResetClick.bind(this)}
-               >
-                  <ContentClear/>
-               </IconButton>
+               <ActionSearch style={styles.actionSearchStyles}/>
             </ToolbarGroup>
             <ToolbarGroup>
                <Toggle

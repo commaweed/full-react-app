@@ -9,7 +9,7 @@ class AppTitleBar extends Component {
 
       const styles = {
          title: {
-            cursor: 'pointer',
+            //cursor: 'pointer',
          }
       };
 
