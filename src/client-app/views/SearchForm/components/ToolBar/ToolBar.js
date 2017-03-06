@@ -21,6 +21,10 @@ class ToolBar extends Component {
       };
    }
 
+   componentDidMount() {
+      this.searchTextField.focus();
+   }
+
    handleMenuChange(event, index, value) {
       this.setState({menuValue: value});
    }
@@ -42,6 +46,14 @@ class ToolBar extends Component {
 
    handleColorReset() {
       console.log('handleColorReset');
+   }
+
+   onKeyboardLeftClick(event, x, y) {
+      console.log(event, x, y);
+   }
+
+   onKeyboardRightClick(event, x, y) {
+      console.log(event, x, y);
    }
 
    render() {
@@ -85,6 +97,7 @@ class ToolBar extends Component {
                <ColorLookup />
                <ResetButton onResetClicked={this.handleSearchTermReset.bind(this)}/>
                <TextField
+                  ref={ (input) => { this.searchTextField = input; } }
                   floatingLabelText="Search Term"
                   floatingLabelStyle={styles.floatingLabelStyle}
                   floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
