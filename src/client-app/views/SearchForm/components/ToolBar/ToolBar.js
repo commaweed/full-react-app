@@ -72,6 +72,8 @@ class ToolBar extends Component {
             height: "45px"
          },
          toolBarStyles: {
+            paddingTop: 37,
+            paddingBottom: 37
          },
          resetButtonStyles: {
             padding: 0,
@@ -89,22 +91,27 @@ class ToolBar extends Component {
          'Black',
          'White',
       ];
+      /*
+       floatingLabelStyle={styles.floatingLabelStyle}
+       floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+
+       */
 
       return (
-         <Toolbar>
+         <Toolbar style={styles.toolBarStyles}>
             <ToolbarGroup firstChild={true} style={{width: "95%"}}>
-               <ResetButton onResetClicked={this.handleColorReset.bind(this)}/>
+               <ResetButton onResetClicked={this.handleColorReset.bind(this)} tooltip="Reset Color" />
                <ColorLookup />
-               <ResetButton onResetClicked={this.handleSearchTermReset.bind(this)}/>
+
+               <ResetButton onResetClicked={this.handleSearchTermReset.bind(this)} tooltip="Reset Search Term" />
                <TextField
                   ref={ (input) => { this.searchTextField = input; } }
                   floatingLabelText="Search Term"
-                  floatingLabelStyle={styles.floatingLabelStyle}
-                  floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
                   fullWidth={true}
                   id='search-term-tf'
                   onKeyUp={this.handleSearchTermKeyUp.bind(this)}
                />
+
                <ActionSearch style={styles.actionSearchStyles}/>
             </ToolbarGroup>
             <ToolbarGroup>

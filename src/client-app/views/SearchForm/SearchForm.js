@@ -21,14 +21,14 @@ class SearchForm extends Component {
 
       const styles = {
          cardContainerStyles: {
-            padding: "0px"
+            padding: 0
          },
          cardStyles: {
             //marginLeft: "20px",
             //marginRight: "20px"
          },
          toolBarStyles: {
-            padding: "0px"
+            //padding: "0px"
          },
          advancedStyles: {
             //height: 100,
@@ -48,9 +48,7 @@ class SearchForm extends Component {
             containerStyle={styles.cardContainerStyles}
             style={styles.cardStyles}
          >
-            <CardText style={styles.toolBarStyles}>
-               <ToolBar onExpandChange={this.handleExpandChange.bind(this)} />
-            </CardText>
+            <ToolBar onExpandChange={this.handleExpandChange.bind(this)} />
             <CardText expandable={true}>
 
                Lorem ipsum dolor sit amet, consectetur adipiscing elit.

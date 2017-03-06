@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 
 class ResetButton extends Component {
@@ -14,21 +15,16 @@ class ResetButton extends Component {
 
    render() {
 
-      const styles = {
-         resetButtonStyles: {
-            padding: 0,
-            margin: 0
-         }
-      };
-
       return (
-         <IconButton
-            tooltip="Reset Search Term"
-            tooltipPosition="bottom-right"
+         <button
+            styleName="resetButton tooltip-right"
+            data-tooltip={this.props.tooltip}
             onClick={this.handleResetClick.bind(this)}
+            tabIndex="-1"
          >
-            <ContentClear/>
-         </IconButton>
+            X
+         </button>
+
       );
    }
 }
@@ -45,6 +41,14 @@ ResetButton.defaultProps = {
 export { ResetButton };
 
 /*
+ <IconButton
+ tooltip="Reset Search Term"
+ tooltipPosition="bottom-right"
+ onClick={this.handleResetClick.bind(this)}
+ >
+ <ContentClear/>
+ </IconButton>
+
  <FlatButton
  backgroundColor={this.props.muiTheme.palette.accent3Color}
  hoverColor="#8AA62F"

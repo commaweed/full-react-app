@@ -3,4 +3,4 @@ import { ResetButton } from './ResetButton.js';
 import styles from './ResetButton.scss';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
-export default muiThemeable()(CSSModules(ResetButton, styles));
+export default muiThemeable()(CSSModules(ResetButton, styles, { allowMultiple: true }));
