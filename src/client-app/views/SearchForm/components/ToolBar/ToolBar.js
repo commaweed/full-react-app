@@ -11,13 +11,18 @@ import ContentClear from 'material-ui/svg-icons/content/clear';
 import ResetButton from '../ResetButton';
 import ColorLookup from '../ColorLookup';
 
+import { Input, Icon } from 'antd';
+
+const Search = Input.Search;
+
 class ToolBar extends Component {
 
    constructor(props) {
       super(props);
       this.state = {
          menuValue: 1,
-         searchFormType: 'Basic'
+         searchFormType: 'Basic',
+         searchTerm: ''
       };
    }
 
@@ -25,8 +30,9 @@ class ToolBar extends Component {
       this.searchTextField.focus();
    }
 
-   handleMenuChange(event, index, value) {
-      this.setState({menuValue: value});
+   handleSearchTermChange(event) {
+      console.log('handleSearchTermChange');
+      this.setState({ searchTerm: event.target.value });
    }
 
    handleOnToggle(event, isInputChecked) {
@@ -48,13 +54,11 @@ class ToolBar extends Component {
       console.log('handleColorReset');
    }
 
-   onKeyboardLeftClick(event, x, y) {
-      console.log(event, x, y);
-   }
-
-   onKeyboardRightClick(event, x, y) {
-      console.log(event, x, y);
-   }
+   emitEmpty = () => {
+      console.log('emitEmpty');
+      this.searchTextField.focus();
+      this.setState({ searchTerm: '' });
+   };
 
    render() {
 
@@ -95,7 +99,29 @@ class ToolBar extends Component {
        floatingLabelStyle={styles.floatingLabelStyle}
        floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
 
+       <ResetButton onResetClicked={this.handleSearchTermReset.bind(this)} tooltip="Reset Search Term" />
+       <TextField
+       ref={ (input) => { this.searchTextField = input; } }
+       floatingLabelText="Search Term"
+       fullWidth={true}
+       id='search-term-tf'
+       onKeyUp={this.handleSearchTermKeyUp.bind(this)}
+       />
+
+       <Input
+       placeholder="Enter Search Term"
+       prefix={<Icon type="search" />}
+       suffix={suffix}
+       value={searchTerm}
+       onChange={ this.handleSearchTermChange.bind(this) }
+       ref={ (input) => { this.searchTextField = input; } }
+       size="large"
+       />
+
        */
+
+      const { searchTerm } = this.state;
+      const suffix = searchTerm ? <Icon type="close-circle" onClick={this.emitEmpty} /> : null;
 
       return (
          <Toolbar style={styles.toolBarStyles}>
@@ -111,6 +137,7 @@ class ToolBar extends Component {
                   id='search-term-tf'
                   onKeyUp={this.handleSearchTermKeyUp.bind(this)}
                />
+
                <RaisedButton
                   label="Submit"
                   primary={true}
