@@ -45,7 +45,7 @@ class ColorLookup extends Component {
             color: this.props.muiTheme.palette.accent1Color,
          },
          autoCompleteStyles: {
-            paddingLeft: "5px"
+            //paddingLeft: "5px"
          }
       };
 

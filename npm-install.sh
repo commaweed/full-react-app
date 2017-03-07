@@ -40,7 +40,7 @@ npm install -S raphael
 
 # another rich ui library
 npm install -S antd
-# npm install -D babel-plugin-import
+npm install -D babel-plugin-import babel-plugin-transform-runtime
 
 # uses google's material design spec
 npm install -S material-ui react-tap-event-plugin font-roboto

@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 
@@ -99,7 +99,7 @@ class ToolBar extends Component {
 
       return (
          <Toolbar style={styles.toolBarStyles}>
-            <ToolbarGroup firstChild={true} style={{width: "95%"}}>
+            <ToolbarGroup firstChild={true} style={{width: "90%"}}>
                <ResetButton onResetClicked={this.handleColorReset.bind(this)} tooltip="Reset Color" />
                <ColorLookup />
 
@@ -111,8 +111,12 @@ class ToolBar extends Component {
                   id='search-term-tf'
                   onKeyUp={this.handleSearchTermKeyUp.bind(this)}
                />
-
-               <ActionSearch style={styles.actionSearchStyles}/>
+               <RaisedButton
+                  label="Submit"
+                  primary={true}
+                  icon={ <ActionSearch/> }
+                  style={{ width: 200 }}
+               />
             </ToolbarGroup>
             <ToolbarGroup>
                <Toggle

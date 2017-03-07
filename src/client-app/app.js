@@ -22,14 +22,14 @@ injectTapEventPlugin();
 const App = () => (
    <MuiThemeProvider muiTheme={getMuiTheme(IndigoTheme)}>
       <div>
-      <AppTitleBar />
-         <br/>
-      <SearchForm/>
+         <AppTitleBar />
+            <br/>
+         <SearchForm/>
       </div>
    </MuiThemeProvider>
 );
 
 ReactDOM.render(
-   <App>hello</App>,
+   <App/>,
    document.getElementById('app')
 );

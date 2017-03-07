@@ -74,7 +74,12 @@ module.exports = {
                plugins: [
                   'react-html-attrs',
                   'transform-class-properties',
-                  'transform-decorators-legacy'
+                  'transform-decorators-legacy',
+                  'transform-runtime',
+                  ['import', {
+                     libraryName: 'antd',
+                     style: 'css'
+                  }]
                ]
             },
             include: appProperties.inputBaseDir
