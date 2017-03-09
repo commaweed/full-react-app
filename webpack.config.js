@@ -54,7 +54,7 @@ const postcssLoader = {
 
 // the configuration
 module.exports = {
-   devtool: appProperties.isDebug ? "inline-source-map" : false, // inline-source-map source-map eval eval-source-map
+   devtool: appProperties.isDebug ? "eval-source-map" : false, // inline-source-map source-map eval eval-source-map
    context: appProperties.inputBaseDir,
    entry: appProperties.appFile,
    output: {
