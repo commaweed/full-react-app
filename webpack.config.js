@@ -59,7 +59,7 @@ module.exports = {
    entry: appProperties.appFile,
    output: {
       path: appProperties.outputBaseDir,
-      filename: appProperties.appName + '.bundle.js'
+      filename: '[name].' + appProperties.appName + '.bundle.js'
       //,devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
    },
    module: {
@@ -123,6 +123,13 @@ module.exports = {
       ]
    },
    plugins: [
+      new webpack.optimize.CommonsChunkPlugin({
+         name: 'vendor',
+         minChunks: function (module) {
+            // this assumes your vendor imports exist in the node_modules directory
+            return module.context && module.context.indexOf('node_modules') !== -1;
+         }
+      }),
       new HtmlWebpackPlugin({
          template: path.resolve(__dirname, appProperties.htmlTemplate),
          title: 'React Demo',
