@@ -11,9 +11,9 @@ class SearchWidget extends Component {
 
    render() {
       return(
-         <Collapse defaultActiveKey={["1"]}>
-            <Panel header="Search Form" key="1">
-               <SearchForm/>
+         <Collapse defaultActiveKey={["1"]}  >
+            <Panel header="Search Form" key="1" >
+               <SearchForm />
             </Panel>
          </Collapse>
       );

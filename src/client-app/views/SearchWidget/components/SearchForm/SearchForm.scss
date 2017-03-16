@@ -1,13 +1,23 @@
-.searchForm {
+.search-form {
    width: 100%;
    padding-top: 10px;
+   background-color:  #F5F5F5;
 }
 
-.colorField {
+.color-field {
    padding-left: 10px;
 }
 
 .switch {
    margin-left: 20px;
    margin-top: -50px;
+}
+
+:global(.ant-collapse-content) {
+   padding: 0 !important;
+}
+
+:global(.ant-collapse-content-box) {
+   padding-top: 0 !important;
+   padding-bottom: 0 !important;
 }

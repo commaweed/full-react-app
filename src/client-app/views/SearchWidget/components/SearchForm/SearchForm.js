@@ -93,7 +93,7 @@ class SearchForm extends Component {
 
       return (
 
-         <Form styleName="searchForm" onSubmit={this.handleSubmit}>
+         <Form styleName="search-form" onSubmit={this.handleSubmit}>
             <Row gutter={16}>
                <Col xs={4} sm={4} md={4} lg={4} style={{marginLeft: 10}}>Color</Col>
                <Col xs={20} sm={20} md={20} lg={20} style={{marginLeft: -10}}>Search</Col>
@@ -101,7 +101,7 @@ class SearchForm extends Component {
             <Row gutter={16}>
                <Col xs={4} sm={4} md={4} lg={4}>
                   <FormItem
-                     styleName="colorField"
+                     styleName="color-field"
                      wrapperCol={{ span: 24 }}
                      validateStatus={colorFieldError ? 'error' : ''}
                      help={colorFieldError || ''}
