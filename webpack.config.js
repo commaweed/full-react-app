@@ -76,6 +76,7 @@ module.exports = {
                   'transform-class-properties',
                   'transform-decorators-legacy',
                   'transform-runtime',
+                  'transform-object-spread-inline',
                   ['import', {
                      libraryName: 'antd',
                      style: 'css'

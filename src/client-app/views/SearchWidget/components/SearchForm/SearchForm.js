@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import FaSearch from 'react-icons/lib/fa/search';
 import IoCloseCircled from 'react-icons/lib/io/close-circled';
 
-import { Form, Icon, Input, Button, Row, Col } from 'antd';
+import { Form, Icon, Input, Button, Row, Col, Switch } from 'antd';
 const FormItem = Form.Item;
 
 import ColorField from './components/ColorField';
+
+import { submitQuery} from "../../../../app-redux/actions/searchFormActions";
 
 function hasErrors(fieldsError) {
    return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -26,10 +28,11 @@ const FIELDS = {
    }
 };
 
-class AntSearchForm extends Component {
+class SearchForm extends Component {
 
    constructor(props) {
       super(props);
+      this.state = { switchChecked: false };
    }
 
    componentDidMount() {
@@ -41,15 +44,15 @@ class AntSearchForm extends Component {
       e.preventDefault();
       this.props.form.validateFields((err, values) => {
          if (!err) {
-            console.log('Received values of form: ', values);
+            const formValues = {
+               color: values.colorField.color.color,
+               searchTerm: values.searchField
+            };
+            console.log('Received values from form: ', formValues);
+            this.props.dispatch(submitQuery(formValues));
          }
       });
    };
-
-   //handleEnterPress = (e) => {
-   //   console.log('enter pressed');
-   //};
-//onPressEnter={ me.handleEnterPress }
 
    resetSearchField = () => {
       this.searchTextField.focus();
@@ -59,6 +62,12 @@ class AntSearchForm extends Component {
       this.props.form.validateFields();
 
    };
+
+   handleSwitchChange(checked) {
+      this.setState({switchChecked: checked });
+   }
+
+   getSwitchValue = () => { return this.state.switchChecked ? 'Advanced' : 'Basic'; };
 
    render() {
 
@@ -71,11 +80,26 @@ class AntSearchForm extends Component {
 
       const me = this;
 
+      let advancedForm = null;
+      if (this.state.switchChecked) {
+         advancedForm = (
+            <Row gutter={16}>
+               <Col span={24}>
+                  <h1>advanced stuff here</h1>
+               </Col>
+            </Row>
+         );
+      }
+
       return (
 
          <Form styleName="searchForm" onSubmit={this.handleSubmit}>
             <Row gutter={16}>
-               <Col span={5}>
+               <Col xs={4} sm={4} md={4} lg={4} style={{marginLeft: 10}}>Color</Col>
+               <Col xs={20} sm={20} md={20} lg={20} style={{marginLeft: -10}}>Search</Col>
+            </Row>
+            <Row gutter={16}>
+               <Col xs={4} sm={4} md={4} lg={4}>
                   <FormItem
                      styleName="colorField"
                      wrapperCol={{ span: 24 }}
@@ -87,7 +111,7 @@ class AntSearchForm extends Component {
                      )}
                   </FormItem>
                </Col>
-               <Col span={17}>
+               <Col xs={12} sm={13} md={14} lg={16}>
                   <FormItem
                      wrapperCol={{ span: 24 }}
                      validateStatus={searchFieldError ? 'error' : ''}
@@ -104,7 +128,7 @@ class AntSearchForm extends Component {
                      )}
                   </FormItem>
                </Col>
-               <Col span={2}>
+               <Col xs={1} sm={1} md={1} lg={1}>
                   <FormItem  wrapperCol={{ span: 24 }}>
                      <Button
                         type="primary"
@@ -115,11 +139,20 @@ class AntSearchForm extends Component {
                      </Button>
                   </FormItem>
                </Col>
+               <Col xs={7} sm={6} md={5} lg={3} push={1} style={{ padding: 10 }}>
+                  <Switch defaultChecked={false}
+                       onChange={this.handleSwitchChange.bind(this) }
+                       checkedChildren={this.getSwitchValue()}
+                       unCheckedChildren={this.getSwitchValue()}
+                       styleName="switch"
+                  />
+               </Col>
             </Row>
+            {advancedForm}
          </Form>
 
       );
    }
 }
 
-export { AntSearchForm };
+export { SearchForm };

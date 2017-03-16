@@ -3,19 +3,9 @@ import IoCloseCircled from 'react-icons/lib/io/close-circled';
 
 import { Select } from 'antd';
 const Option = Select.Option;
+const OptGroup = Select.OptGroup;
 
-// use axios to fetch these
-const COLORS = [
-   'Red',
-   'Orange',
-   'Yellow',
-   'Green',
-   'Blue',
-   'Purple',
-   'Black',
-   'White',
-];
-
+import { fetchColors } from "../../../../../../app-redux/actions/colorsActions";
 
 class ColorField extends Component {
 
@@ -24,15 +14,13 @@ class ColorField extends Component {
 
       const value = this.props.value || {};
       this.state = {
-         data: [],
-         defaultValue: '',
-         color: value.color || ''
+         color: value.color || '',
+         // think default should go here too
       };
    }
 
    componentWillMount() {
-      // simulate db fetch
-      this.setState({ data: COLORS, defaultValue: COLORS[0] });
+      this.props.dispatch(fetchColors());
    }
 
    handleColorChange = (color) => {
@@ -57,7 +45,13 @@ class ColorField extends Component {
    }
 
    render() {
-      const options = this.state.data.map(color => <Option key={color} value={color}>{color}</Option>);
+      const { colors, defaultValue } = this.props;
+      console.log(this.props);
+      let options=[];
+      if (colors && colors.length > 0) {
+         options = colors.map((color) => (<Option key={color} value={color}>{color}</Option>));
+      }
+
       return (
          <Select
             showSearch
@@ -66,9 +60,11 @@ class ColorField extends Component {
             filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onChange={this.handleColorChange}
             size="large"
-            defaultValue={this.state.defaultValue}
+            defaultValue={defaultValue}
          >
-            {options}
+            <OptGroup label="Color">
+               {options}
+            </OptGroup>
          </Select>
       );
    }

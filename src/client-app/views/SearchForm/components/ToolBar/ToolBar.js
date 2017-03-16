@@ -1,45 +1,46 @@
 import React, { Component, PropTypes } from 'react';
-import Toggle from 'material-ui/Toggle';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
+
+import { Card, Switch} from 'antd';
+
 import AntSearchForm from '../../../AntSearchForm';
+
+import { Collapse } from 'antd';
+const Panel = Collapse.Panel;
+
+function callback(key) {
+   console.log(key);
+}
 
 class ToolBar extends Component {
 
    constructor(props) {
       super(props);
       this.state = {
-         searchFormType: 'Basic'
+         checked: false
       };
    }
 
-   handleOnToggle(event, isInputChecked) {
-      this.setState({searchFormType: isInputChecked ? 'Advanced' : 'Basic' });
-      this.props.onExpandChange(isInputChecked);
+   handleOnToggle(checked) {
+      this.setState({checked: checked });
    }
 
    render() {
-
-      const styles = {
-         toolBarStyles: {
-            paddingTop: 37,
-            paddingBottom: 37
-         }
-      };
+      const { checked } = this.state;
 
       return (
-         <Toolbar style={styles.toolBarStyles}>
-            <ToolbarGroup firstChild={true} style={{width: "90%"}}>
-               <AntSearchForm/>
-            </ToolbarGroup>
-            <ToolbarGroup>
-               <Toggle
-                  label={this.state.searchFormType}
-                  labelPosition="left"
-                  style={styles.toggle}
-                  onToggle={this.handleOnToggle.bind(this)}
-               />
-            </ToolbarGroup>
-         </Toolbar>
+         <Collapse defaultActiveKey={['1']} onChange={callback}>
+            <Panel header="Search Form" key="1">
+               <Card bordered={true} style={{ height: 300 }}>
+                  <AntSearchForm/>
+                  <Switch
+                     checkedChildren={ checked ? 'Basic' : 'Advanced' }
+                     unCheckedChildren={ checked ? 'Advanced' : 'Basic' }
+                     onChange={this.handleOnToggle.bind(this)}
+                  />
+               </Card>
+            </Panel>
+         </Collapse>
+
       );
    }
 }
