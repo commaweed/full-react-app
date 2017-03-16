@@ -12,10 +12,9 @@ class ColorField extends Component {
    constructor(props) {
       super(props);
 
-      const value = this.props.value || {};
+      const value = this.props.value;
       this.state = {
-         color: value.color || '',
-         // think default should go here too
+         color: value || ''
       };
    }
 
@@ -27,26 +26,30 @@ class ColorField extends Component {
       if (!('value' in this.props)) {
          this.setState({ color: color });
       }
-      this.triggerChange({ color });
+      this.triggerChange(color);
    };
 
    triggerChange = (changedValue) => {
       const onChange = this.props.onChange;
       if (onChange) {
-         onChange(Object.assign({}, { color: changedValue}));
+         onChange(changedValue);
       }
    };
 
    componentWillReceiveProps(nextProps) {
       if ('value' in nextProps) {
          const value = nextProps.value;
-         if (value) this.setState({color: value.color});
+         const colors = nextProps.colors;
+         if (value) {
+            this.setState({color: value});
+         } else if (colors && colors.length > 0) {
+            this.setState({color: colors[0]});
+         }
       }
    }
 
    render() {
-      const { colors, defaultValue } = this.props;
-      console.log(this.props);
+      const { colors } = this.props;
       let options=[];
       if (colors && colors.length > 0) {
          options = colors.map((color) => (<Option key={color} value={color}>{color}</Option>));
@@ -60,7 +63,7 @@ class ColorField extends Component {
             filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onChange={this.handleColorChange}
             size="large"
-            defaultValue={defaultValue}
+            defaultValue={this.state.color}
          >
             <OptGroup label="Color">
                {options}
@@ -71,7 +74,7 @@ class ColorField extends Component {
 }
 
 ColorField.propTypes = {
-   value: PropTypes.object,
+   value: PropTypes.string,
    onChange: PropTypes.func
 };
 

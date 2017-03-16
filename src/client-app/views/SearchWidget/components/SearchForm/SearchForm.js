@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import FaSearch from 'react-icons/lib/fa/search';
 import IoCloseCircled from 'react-icons/lib/io/close-circled';
 
-import { Form, Icon, Input, Button, Row, Col, Switch } from 'antd';
+import { Form, Icon, Input, Button, Row, Col, Switch, Select } from 'antd';
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 import ColorField from './components/ColorField';
 
@@ -25,8 +26,26 @@ const FIELDS = {
       rules: [
          { required: true, message: 'Please enter the search term!' }
       ]
+   },
+   withinField: {
+      name: 'withinField',
+      rules: [
+         { required: true, message: 'Please choose within!' }
+      ]
+   },
+   orthField: {
+      name: 'orthField',
+      rules: [
+         { required: false }
+      ]
    }
 };
+
+function getPotentialError(fieldName, form) {
+   return form.isFieldTouched(fieldName) && form.getFieldError(fieldName);
+}
+
+const rowGutterSize = 16;
 
 class SearchForm extends Component {
 
@@ -44,8 +63,9 @@ class SearchForm extends Component {
       e.preventDefault();
       this.props.form.validateFields((err, values) => {
          if (!err) {
+            console.log(values);
             const formValues = {
-               color: values.colorField.color.color,
+               color: values.colorField,
                searchTerm: values.searchField
             };
             console.log('Received values from form: ', formValues);
@@ -67,6 +87,11 @@ class SearchForm extends Component {
       this.setState({switchChecked: checked });
    }
 
+   handleReset() {
+      this.props.form.resetFields();
+      this.props.form.validateFields();
+   }
+
    getSwitchValue = () => { return this.state.switchChecked ? 'Advanced' : 'Basic'; };
 
    render() {
@@ -74,34 +99,25 @@ class SearchForm extends Component {
       const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue } = this.props.form;
 
       // Only show error after a field is touched.
-      const colorFieldError = isFieldTouched(FIELDS.colorField.name) && getFieldError(FIELDS.colorField.name);
-      const searchFieldError = isFieldTouched(FIELDS.searchField.name) && getFieldError(FIELDS.searchField.name);
+      const colorFieldError = getPotentialError(FIELDS.colorField.name, this.props.form);
+      const searchFieldError = getPotentialError(FIELDS.searchField.name, this.props.form);
+      const withinFieldError = getPotentialError(FIELDS.withinField.name, this.props.form);
       const suffix = getFieldValue(FIELDS.searchField.name) ? <IoCloseCircled onClick={ this.resetSearchField.bind(this) } /> : null;
 
       const me = this;
 
-      let advancedForm = null;
-      if (this.state.switchChecked) {
-         advancedForm = (
-            <Row gutter={16}>
-               <Col span={24}>
-                  <h1>advanced stuff here</h1>
-               </Col>
-            </Row>
-         );
-      }
+      const { switchChecked } = this.state;
 
       return (
-
          <Form styleName="search-form" onSubmit={this.handleSubmit}>
-            <Row gutter={16}>
+            <Row gutter={ rowGutterSize }>
                <Col xs={4} sm={4} md={4} lg={4} style={{marginLeft: 10}}>Color</Col>
                <Col xs={20} sm={20} md={20} lg={20} style={{marginLeft: -10}}>Search</Col>
             </Row>
-            <Row gutter={16}>
+            <Row gutter={ rowGutterSize }>
                <Col xs={4} sm={4} md={4} lg={4}>
                   <FormItem
-                     styleName="color-field"
+                     styleName="far-left-field"
                      wrapperCol={{ span: 24 }}
                      validateStatus={colorFieldError ? 'error' : ''}
                      help={colorFieldError || ''}
@@ -111,7 +127,7 @@ class SearchForm extends Component {
                      )}
                   </FormItem>
                </Col>
-               <Col xs={12} sm={13} md={14} lg={16}>
+               <Col xs={11} sm={12} md={13} lg={15}>
                   <FormItem
                      wrapperCol={{ span: 24 }}
                      validateStatus={searchFieldError ? 'error' : ''}
@@ -139,6 +155,17 @@ class SearchForm extends Component {
                      </Button>
                   </FormItem>
                </Col>
+               <Col xs={1} sm={1} md={1} lg={1}>
+                  <FormItem  wrapperCol={{ span: 24 }}>
+                     <Button
+                        type="default"
+                        htmlType="reset"
+                        onClick={this.handleReset.bind(this)}
+                     >
+                        Reset
+                     </Button>
+                  </FormItem>
+               </Col>
                <Col xs={7} sm={6} md={5} lg={3} push={1} style={{ padding: 10 }}>
                   <Switch defaultChecked={false}
                        onChange={this.handleSwitchChange.bind(this) }
@@ -148,7 +175,78 @@ class SearchForm extends Component {
                   />
                </Col>
             </Row>
-            {advancedForm}
+            {
+               switchChecked &&
+               <div>
+                  <Row gutter={ rowGutterSize }>
+                     <Col xs={4} sm={4} md={4} lg={4} style={{marginLeft: 10}}/>
+                     <Col xs={20} sm={20} md={20} lg={20} style={{marginLeft: -10}}>Additional</Col>
+                  </Row>
+                  <Row gutter={ rowGutterSize }>
+                     <Col xs={4} sm={4} md={4} lg={4}>
+                     </Col>
+                     <Col xs={12} sm={13} md={14} lg={16}>
+                        blah
+                     </Col>
+                     <Col xs={1} sm={1} md={1} lg={1}>
+
+                     </Col>
+                  </Row>
+                  <Row gutter={ rowGutterSize }>
+                     <Col xs={4} sm={4} md={4} lg={4} style={{marginLeft: 10}}>Within</Col>
+                     <Col xs={20} sm={20} md={20} lg={20} style={{marginLeft: -10}}>Orth</Col>
+                  </Row>
+                  <Row gutter={ rowGutterSize }>
+                     <Col xs={4} sm={4} md={4} lg={4}>
+                        <FormItem
+                           styleName="far-left-field"
+                           wrapperCol={{ span: 24 }}
+                           validateStatus={ withinFieldError ? 'error' : ''}
+                           help={ withinFieldError || ''}
+                        >
+                           { getFieldDecorator(FIELDS.withinField.name, { rules: FIELDS.withinField.rules, initialValue: 'all' })(
+                              <Select
+                                 showSearch
+                                 placeholder="Choose Within"
+                                 optionFilterProp="children"
+                                 filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                              >
+                                 <Option value="all">All Fields</Option>
+                                 <Option value="words">Words</Option>
+                                 <Option value="translation">Translation</Option>
+                                 <Option value="definition">Translation + Definition</Option>
+                              </Select>
+                           )}
+                        </FormItem>
+
+                     </Col>
+                     <Col xs={4} sm={4} md={4} lg={4}>
+                        <FormItem
+                           wrapperCol={{ span: 24 }}
+                        >
+                           { getFieldDecorator(FIELDS.orthField.name, { rules: FIELDS.orthField.rules })(
+                              <Select
+                                 showSearch
+                                 placeholder="Choose Orth"
+                                 optionFilterProp="children"
+                                 filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                 allowClear={true}
+                              >
+                                 <Option value="oi">Oi</Option>
+                                 <Option value="oisu">oi (S.U.)</Option>
+                                 <Option value="oiss">Oi Syllabified and Stressed</Option>
+
+                              </Select>
+                           )}
+                        </FormItem>
+                     </Col>
+                     <Col xs={12} sm={12} md={12} lg={12}>
+
+                     </Col>
+                  </Row>
+
+               </div>
+            }
          </Form>
 
       );
