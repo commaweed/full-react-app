@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import FaSearch from 'react-icons/lib/fa/search';
 import IoCloseCircled from 'react-icons/lib/io/close-circled';
 
-import { Form, Icon, Input, Button, Row, Col, Switch, Select } from 'antd';
+import { Form, Icon, Input, Button, Row, Col, Switch, Select, Popconfirm } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -63,13 +63,8 @@ class SearchForm extends Component {
       e.preventDefault();
       this.props.form.validateFields((err, values) => {
          if (!err) {
-            console.log(values);
-            const formValues = {
-               color: values.colorField,
-               searchTerm: values.searchField
-            };
-            console.log('Received values from form: ', formValues);
-            this.props.dispatch(submitQuery(formValues));
+            console.log('Received values from form: ', values);
+            this.props.dispatch(submitQuery(values));
          }
       });
    };
@@ -156,13 +151,20 @@ class SearchForm extends Component {
                </Col>
                <Col xs={1} sm={1} md={1} lg={1}>
                   <FormItem  wrapperCol={{ span: 24 }}>
-                     <Button
-                        type="default"
-                        htmlType="reset"
-                        onClick={this.handleReset.bind(this)}
+                     <Popconfirm
+                        placement="bottom"
+                        title="Are you sure you want to reset all fields?"
+                        onConfirm={this.handleReset.bind(this)}
+                        okText="Yes"
+                        cancelText="No"
                      >
-                        Reset
-                     </Button>
+                        <Button
+                           type="default"
+                           htmlType="reset"
+                        >
+                           Reset
+                        </Button>
+                     </Popconfirm>
                   </FormItem>
                </Col>
                <Col xs={7} sm={6} md={5} lg={3} push={1} style={{ padding: 10 }}>
@@ -174,6 +176,7 @@ class SearchForm extends Component {
                   />
                </Col>
             </Row>
+
             {
                switchChecked &&
                <div>
@@ -246,6 +249,7 @@ class SearchForm extends Component {
 
                </div>
             }
+
          </Form>
 
       );

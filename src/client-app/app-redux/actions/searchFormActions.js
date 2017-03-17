@@ -2,6 +2,8 @@
 
 export function submitQuery(query) {
 
+   console.log('Submitting Query values', query);
+
    const data = [];
 
    return function (dispatch) {
