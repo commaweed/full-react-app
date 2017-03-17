@@ -97,6 +97,7 @@ class SearchForm extends Component {
    render() {
 
       const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue } = this.props.form;
+      const { switchChecked } = this.state;
 
       // Only show error after a field is touched.
       const colorFieldError = getPotentialError(FIELDS.colorField.name, this.props.form);
@@ -105,8 +106,6 @@ class SearchForm extends Component {
       const suffix = getFieldValue(FIELDS.searchField.name) ? <IoCloseCircled onClick={ this.resetSearchField.bind(this) } /> : null;
 
       const me = this;
-
-      const { switchChecked } = this.state;
 
       return (
          <Form styleName="search-form" onSubmit={this.handleSubmit}>
@@ -122,7 +121,7 @@ class SearchForm extends Component {
                      validateStatus={colorFieldError ? 'error' : ''}
                      help={colorFieldError || ''}
                   >
-                     { getFieldDecorator(FIELDS.colorField.name, { rules: FIELDS.colorField.rules })(
+                     { getFieldDecorator(FIELDS.colorField.name, { rules: FIELDS.colorField.rules, initialValue: 'Red' })(
                         <ColorField/>
                      )}
                   </FormItem>

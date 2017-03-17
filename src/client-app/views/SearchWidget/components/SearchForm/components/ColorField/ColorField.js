@@ -12,9 +12,9 @@ class ColorField extends Component {
    constructor(props) {
       super(props);
 
-      const value = this.props.value;
+      const chosenColor = this.props.value;
       this.state = {
-         color: value || ''
+         color: chosenColor || props.defaultValue
       };
    }
 
@@ -43,7 +43,7 @@ class ColorField extends Component {
          if (value) {
             this.setState({color: value});
          } else if (colors && colors.length > 0) {
-            this.setState({color: colors[0]});
+            this.setState({color: ''});
          }
       }
    }
@@ -63,7 +63,7 @@ class ColorField extends Component {
             filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             onChange={this.handleColorChange}
             size="large"
-            defaultValue={this.state.color}
+            value={this.state.color}
          >
             <OptGroup label="Color">
                {options}
