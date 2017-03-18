@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import FaSearch from 'react-icons/lib/fa/search';
 import IoCloseCircled from 'react-icons/lib/io/close-circled';
 
@@ -9,10 +9,6 @@ const Option = Select.Option;
 import ColorField from './components/ColorField';
 
 import { submitQuery} from "../../../../app-redux/actions/searchFormActions";
-
-function hasErrors(fieldsError) {
-   return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
 
 const FIELDS = {
    colorField: {
@@ -41,17 +37,32 @@ const FIELDS = {
    }
 };
 
+const rowGutterSize = 16;
+
+function hasErrors(fieldsError) {
+   return Object.keys(fieldsError).some(field => fieldsError[field]);
+}
+
 function getPotentialError(fieldName, form) {
    return form.isFieldTouched(fieldName) && form.getFieldError(fieldName);
 }
 
-const rowGutterSize = 16;
+function addFormLabelRow(label1, label2) {
+   const col1LabelProps = { xs: 4, sm: 4, md: 4, lg: 4, style: { marginLeft: 10} };
+   const col2LabelProps = { xs: 20, sm: 20, md: 20, lg: 20, style: { marginLeft: -10} };
+
+   return (
+      <Row gutter={ rowGutterSize }>
+         <Col {...col1LabelProps}>{label1 ? label1 : ''}</Col>
+         <Col {...col2LabelProps}>{label2 ? label2 : ''}</Col>
+      </Row>
+   );
+}
 
 class SearchForm extends Component {
 
    constructor(props) {
       super(props);
-      this.state = { switchChecked: false };
    }
 
    componentDidMount() {
@@ -78,21 +89,15 @@ class SearchForm extends Component {
 
    };
 
-   handleSwitchChange(checked) {
-      this.setState({switchChecked: checked });
-   }
-
    handleReset() {
       this.props.form.resetFields();
       this.props.form.validateFields();
    }
 
-   getSwitchValue = () => { return this.state.switchChecked ? 'Advanced' : 'Basic'; };
-
    render() {
 
       const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue } = this.props.form;
-      const { switchChecked } = this.state;
+      const { isAdvancedForm } = this.props;
 
       // Only show error after a field is touched.
       const colorFieldError = getPotentialError(FIELDS.colorField.name, this.props.form);
@@ -100,16 +105,18 @@ class SearchForm extends Component {
       const withinFieldError = getPotentialError(FIELDS.withinField.name, this.props.form);
       const suffix = getFieldValue(FIELDS.searchField.name) ? <IoCloseCircled onClick={ this.resetSearchField.bind(this) } /> : null;
 
+      const col1LabelProps = { xs: 4, sm: 4, md: 4, lg: 4, style: { marginLeft: 10} };
+      const col2LabelProps = { xs: 20, sm: 20, md: 20, lg: 20, style: { marginLeft: -10} };
+      const col1FieldProps = { xs: 4, sm: 4, md: 4, lg: 4 };
+      const col2FieldProps = { xs: 11, sm: 12, md: 13, lg: 15 };
+
       const me = this;
 
       return (
          <Form styleName="search-form" onSubmit={this.handleSubmit}>
+            { addFormLabelRow('Color', 'Search') }
             <Row gutter={ rowGutterSize }>
-               <Col xs={4} sm={4} md={4} lg={4} style={{marginLeft: 10}}>Color</Col>
-               <Col xs={20} sm={20} md={20} lg={20} style={{marginLeft: -10}}>Search</Col>
-            </Row>
-            <Row gutter={ rowGutterSize }>
-               <Col xs={4} sm={4} md={4} lg={4}>
+               <Col {...col1FieldProps}>
                   <FormItem
                      styleName="far-left-field"
                      wrapperCol={{ span: 24 }}
@@ -121,7 +128,7 @@ class SearchForm extends Component {
                      )}
                   </FormItem>
                </Col>
-               <Col xs={11} sm={12} md={13} lg={15}>
+               <Col {...col2FieldProps}>
                   <FormItem
                      wrapperCol={{ span: 24 }}
                      validateStatus={searchFieldError ? 'error' : ''}
@@ -138,68 +145,52 @@ class SearchForm extends Component {
                      )}
                   </FormItem>
                </Col>
-               <Col xs={1} sm={1} md={1} lg={1}>
+               <Col xs={2} sm={2} md={2} lg={2}>
                   <FormItem  wrapperCol={{ span: 24 }}>
-                     <Button
-                        type="primary"
-                        htmlType="submit"
-                        disabled={hasErrors(getFieldsError())}
-                     >
-                        Submit
-                     </Button>
-                  </FormItem>
-               </Col>
-               <Col xs={1} sm={1} md={1} lg={1}>
-                  <FormItem  wrapperCol={{ span: 24 }}>
-                     <Popconfirm
-                        placement="bottom"
-                        title="Are you sure you want to reset all fields?"
-                        onConfirm={this.handleReset.bind(this)}
-                        okText="Yes"
-                        cancelText="No"
-                     >
+                     <Button.Group size="default">
                         <Button
-                           type="default"
-                           htmlType="reset"
+                           type="primary"
+                           htmlType="submit"
+                           disabled={hasErrors(getFieldsError())}
                         >
-                           Reset
+                           Submit
                         </Button>
-                     </Popconfirm>
+                        <Popconfirm
+                           placement="bottom"
+                           title="Are you sure you want to reset all fields?"
+                           onConfirm={this.handleReset.bind(this)}
+                           okText="Yes"
+                           cancelText="No"
+                        >
+                           <Button
+                              type="default"
+                              htmlType="reset"
+                           >
+                              Reset
+                           </Button>
+                        </Popconfirm>
+                     </Button.Group>
                   </FormItem>
-               </Col>
-               <Col xs={7} sm={6} md={5} lg={3} push={1} style={{ padding: 10 }}>
-                  <Switch defaultChecked={false}
-                       onChange={this.handleSwitchChange.bind(this) }
-                       checkedChildren={this.getSwitchValue()}
-                       unCheckedChildren={this.getSwitchValue()}
-                       styleName="switch"
-                  />
                </Col>
             </Row>
 
             {
-               switchChecked &&
+               isAdvancedForm &&
                <div>
+                  { addFormLabelRow(null, 'Additional Search Term') }
                   <Row gutter={ rowGutterSize }>
-                     <Col xs={4} sm={4} md={4} lg={4} style={{marginLeft: 10}}/>
-                     <Col xs={20} sm={20} md={20} lg={20} style={{marginLeft: -10}}>Additional</Col>
-                  </Row>
-                  <Row gutter={ rowGutterSize }>
-                     <Col xs={4} sm={4} md={4} lg={4}>
+                     <Col {...col1FieldProps}>
                      </Col>
-                     <Col xs={12} sm={13} md={14} lg={16}>
+                     <Col {...col2FieldProps}>
                         blah
                      </Col>
-                     <Col xs={1} sm={1} md={1} lg={1}>
-
-                     </Col>
                   </Row>
                   <Row gutter={ rowGutterSize }>
-                     <Col xs={4} sm={4} md={4} lg={4} style={{marginLeft: 10}}>Within</Col>
-                     <Col xs={20} sm={20} md={20} lg={20} style={{marginLeft: -10}}>Orth</Col>
+                     <Col {...col1LabelProps}>Within</Col>
+                     <Col {...col2LabelProps}>Orth</Col>
                   </Row>
                   <Row gutter={ rowGutterSize }>
-                     <Col xs={4} sm={4} md={4} lg={4}>
+                     <Col {...col1FieldProps}>
                         <FormItem
                            styleName="far-left-field"
                            wrapperCol={{ span: 24 }}
@@ -255,5 +246,9 @@ class SearchForm extends Component {
       );
    }
 }
+
+SearchForm.propTypes = {
+   isAdvancedForm: PropTypes.bool
+};
 
 export { SearchForm };
