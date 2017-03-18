@@ -155,7 +155,7 @@ module.exports = {
          sourceMap: appProperties.isDebug
       }),
       new OptimizeCssAssetsPlugin({
-         assetNameRegExp: /\.scss$/g,
+         assetNameRegExp: /\.s?css$/g,
          cssProcessor: require('cssnano'),
          cssProcessorOptions: {
             discardComments: {

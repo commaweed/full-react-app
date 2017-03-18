@@ -14,6 +14,7 @@ const MainPage = () => (
          <SearchWidget/>
          <br/>
          <QueryResultsWidget/>
+         <div class="results"><i class="fa-bars">test</i></div>
       </Content>
    </Layout>
 );
