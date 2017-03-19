@@ -23,6 +23,12 @@ const FIELDS = {
          { required: true, message: 'Please enter the search term!' }
       ]
    },
+   additionalSearchField: {
+      name: 'additionalSearchField',
+      rules: [
+         { required: false }
+      ]
+   },
    withinField: {
       name: 'withinField',
       rules: [
@@ -95,7 +101,13 @@ class SearchForm extends Component {
       fieldValues[FIELDS.searchField.name] = '';
       this.props.form.setFieldsValue(fieldValues);
       this.props.form.validateFields();
+   };
 
+   resetAdditionalSearchField = () => {
+      this.additionalSearchTermField.focus();
+      const fieldValues = Object.create({});
+      fieldValues[FIELDS.additionalSearchField.name] = '';
+      this.props.form.setFieldsValue(fieldValues);
    };
 
    handleReset() {
@@ -112,13 +124,25 @@ class SearchForm extends Component {
       const colorFieldError = getPotentialError(FIELDS.colorField.name, this.props.form);
       const searchFieldError = getPotentialError(FIELDS.searchField.name, this.props.form);
       const withinFieldError = getPotentialError(FIELDS.withinField.name, this.props.form);
-      const suffix = getFieldValue(FIELDS.searchField.name) ? <IoCloseCircled onClick={ this.resetSearchField.bind(this) } /> : null;
+      const searchTermSuffix = getFieldValue(FIELDS.searchField.name) ? <IoCloseCircled onClick={ this.resetSearchField.bind(this) } /> : null;
+      const additionalSearchTermSuffix = getFieldValue(FIELDS.additionalSearchField.name) ? <IoCloseCircled onClick={ this.resetAdditionalSearchField.bind(this) } /> : null;
 
       const col1LabelProps = { span: 4, style: { marginLeft: 10} };
-      const col2LabelProps = { span: 20, style: { marginLeft: -10} };
       const col1FieldProps = { span: 4 };
       const col2FieldProps = { xs: 14, sm: 15, md: 16, lg: 17 };
       const btnGroupProps = { xs: 6, sm: 5, md: 4, lg: 3 };
+
+      const additionalSearchTermPrefixSelector = getFieldDecorator('additionalSearchTermPrefix', {
+         initialValue: 'AND',
+      })(
+         <Select style={{ width: 100}}>
+            <Option value="AND">AND</Option>
+            <Option value="OR">OR</Option>
+            <Option value="NEAR">NEAR</Option>
+            <Option value="BEFORE">BEFORE</Option>
+            <Option value="AFTER">AFTER</Option>
+         </Select>
+      );
 
       const me = this;
 
@@ -148,7 +172,7 @@ class SearchForm extends Component {
                         <Input
                            placeholder="Enter Search Term"
                            prefix={<FaSearch/>}
-                           suffix={suffix}
+                           suffix={searchTermSuffix}
                            ref={ (input) => { me.searchTextField = input; } }
                            size="large"
                         />
@@ -187,17 +211,46 @@ class SearchForm extends Component {
             {
                isAdvancedForm &&
                <div>
-                  { addFormLabelRow(null, 'Additional Search Term') }
+                  { addFormLabelRow("Orth", 'Additional Search Term') }
                   <Row gutter={ rowGutterSize }>
                      <Col {...col1FieldProps}>
+                        <FormItem
+                           styleName="far-left-field"
+                           wrapperCol={{ span: 24 }}
+                        >
+                           { getFieldDecorator(FIELDS.orthField.name, { rules: FIELDS.orthField.rules })(
+                              <Select
+                                 showSearch
+                                 placeholder="(Optional) Choose Orth"
+                                 optionFilterProp="children"
+                                 filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                 allowClear={true}
+                              >
+                                 <Option value="oi">Oi</Option>
+                                 <Option value="oisu">oi (S.U.)</Option>
+                                 <Option value="oiss">Oi Syllabified and Stressed</Option>
+                              </Select>
+                           )}
+                        </FormItem>
                      </Col>
                      <Col {...col2FieldProps}>
-                        blah
+                        <FormItem
+                           wrapperCol={{ span: 24 }}
+                        >
+                           { getFieldDecorator(FIELDS.additionalSearchField.name, { rules: FIELDS.additionalSearchField.rules })(
+                              <Input
+                                 placeholder="(Optional) Enter Additional Search Term"
+                                 addonBefore={additionalSearchTermPrefixSelector}
+                                 suffix={additionalSearchTermSuffix}
+                                 ref={ (input) => { me.additionalSearchTermField = input; } }
+                                 size="large"
+                              />
+                           )}
+                        </FormItem>
                      </Col>
                   </Row>
                   <Row gutter={ rowGutterSize }>
                      <Col {...col1LabelProps}>Within</Col>
-                     <Col {...col2LabelProps}>Orth</Col>
                   </Row>
                   <Row gutter={ rowGutterSize }>
                      <Col {...col1FieldProps}>
@@ -223,26 +276,7 @@ class SearchForm extends Component {
                         </FormItem>
 
                      </Col>
-                     <Col span={4}>
-                        <FormItem
-                           wrapperCol={{ span: 24 }}
-                        >
-                           { getFieldDecorator(FIELDS.orthField.name, { rules: FIELDS.orthField.rules })(
-                              <Select
-                                 showSearch
-                                 placeholder="Choose Orth"
-                                 optionFilterProp="children"
-                                 filterOption={(input, option) => option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                 allowClear={true}
-                              >
-                                 <Option value="oi">Oi</Option>
-                                 <Option value="oisu">oi (S.U.)</Option>
-                                 <Option value="oiss">Oi Syllabified and Stressed</Option>
-                              </Select>
-                           )}
-                        </FormItem>
-                     </Col>
-                     <Col span={12}>
+                     <Col span={16}>
 
                      </Col>
                   </Row>
