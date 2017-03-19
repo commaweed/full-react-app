@@ -32,8 +32,8 @@ class SearchWidget extends Component {
    render() {
       const header = (
          <Row>
-            <Col span={12}>Search Form</Col>
-            <Col span={12} onClick={this.onSwitchClick.bind(this)} >
+            <Col span={23}>Search Form</Col>
+            <Col span={1} onClick={this.onSwitchClick.bind(this)} >
                <span style={{ float: 'right', paddingRight: '10px' }}>
                <Switch defaultChecked={false}
                   onChange={ this.handleSwitchChange.bind(this) }
