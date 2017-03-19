@@ -18,7 +18,6 @@ class SearchWidget extends Component {
 
    handleSwitchChange(checked) {
       this.setState({ isAdvancedForm: checked, isCollapsed: false });
-      console.log(this.state.isCollapsed);
    }
 
    onCollapseClick(event) {
@@ -34,19 +33,28 @@ class SearchWidget extends Component {
       const header = (
          <Row>
             <Col span={12}>Search Form</Col>
-            <Col span={1} offset={11} onClick={this.onSwitchClick.bind(this)} >
+            <Col span={12} onClick={this.onSwitchClick.bind(this)} >
+               <span style={{ float: 'right', paddingRight: '10px' }}>
                <Switch defaultChecked={false}
                   onChange={ this.handleSwitchChange.bind(this) }
                   checkedChildren={this.getSwitchValue()}
                   unCheckedChildren={this.getSwitchValue()}
                />
+               </span>
             </Col>
          </Row>
       );
 
       return(
-         <Collapse activeKey={ this.state.isCollapsed ? [] : ["1"] } onChange={this.onCollapseClick.bind(this)}>
-            <Panel header={header} key="1" onClick={this.onCollapseClick.bind(this)}>
+         <Collapse
+            activeKey={ this.state.isCollapsed ? [] : ["1"] }
+            onChange={this.onCollapseClick.bind(this)}
+         >
+            <Panel
+               header={header}
+               key="1"
+               onClick={this.onCollapseClick.bind(this)}
+            >
                <SearchForm isAdvancedForm={this.state.isAdvancedForm}/>
             </Panel>
          </Collapse>

@@ -48,13 +48,22 @@ function getPotentialError(fieldName, form) {
 }
 
 function addFormLabelRow(label1, label2) {
-   const col1LabelProps = { xs: 4, sm: 4, md: 4, lg: 4, style: { marginLeft: 10} };
-   const col2LabelProps = { xs: 20, sm: 20, md: 20, lg: 20, style: { marginLeft: -10} };
+   const col1LabelProps = { span: 4, style: { marginLeft: 10} };
+   const col2LabelProps = { span: 20, style: { marginLeft: -10} };
+
+   function getLabelValue(label) {
+      if (!label) return '';
+      if (typeof label === 'string') return label;
+      if (!label.name) return '';
+      if (label.name && !label.isRequired) return label.name;
+      const requiredStyle = { color: 'red' };
+      return (<span><i style={requiredStyle}>*</i>{label.name}</span>);
+   }
 
    return (
       <Row gutter={ rowGutterSize }>
-         <Col {...col1LabelProps}>{label1 ? label1 : ''}</Col>
-         <Col {...col2LabelProps}>{label2 ? label2 : ''}</Col>
+         <Col {...col1LabelProps}>{getLabelValue(label1)}</Col>
+         <Col {...col2LabelProps}>{getLabelValue(label2)}</Col>
       </Row>
    );
 }
@@ -105,16 +114,16 @@ class SearchForm extends Component {
       const withinFieldError = getPotentialError(FIELDS.withinField.name, this.props.form);
       const suffix = getFieldValue(FIELDS.searchField.name) ? <IoCloseCircled onClick={ this.resetSearchField.bind(this) } /> : null;
 
-      const col1LabelProps = { xs: 4, sm: 4, md: 4, lg: 4, style: { marginLeft: 10} };
-      const col2LabelProps = { xs: 20, sm: 20, md: 20, lg: 20, style: { marginLeft: -10} };
-      const col1FieldProps = { xs: 4, sm: 4, md: 4, lg: 4 };
-      const col2FieldProps = { xs: 11, sm: 12, md: 13, lg: 15 };
+      const col1LabelProps = { span: 4, style: { marginLeft: 10} };
+      const col2LabelProps = { span: 20, style: { marginLeft: -10} };
+      const col1FieldProps = { span: 4 };
+      const col2FieldProps = { span: 17 };
 
       const me = this;
 
       return (
          <Form styleName="search-form" onSubmit={this.handleSubmit}>
-            { addFormLabelRow('Color', 'Search') }
+            { addFormLabelRow('Color', { name: 'Search', isRequired: true }) }
             <Row gutter={ rowGutterSize }>
                <Col {...col1FieldProps}>
                   <FormItem
@@ -145,7 +154,7 @@ class SearchForm extends Component {
                      )}
                   </FormItem>
                </Col>
-               <Col xs={2} sm={2} md={2} lg={2}>
+               <Col span={2}>
                   <FormItem  wrapperCol={{ span: 24 }}>
                      <Button.Group size="default">
                         <Button
@@ -213,7 +222,7 @@ class SearchForm extends Component {
                         </FormItem>
 
                      </Col>
-                     <Col xs={4} sm={4} md={4} lg={4}>
+                     <Col span={4}>
                         <FormItem
                            wrapperCol={{ span: 24 }}
                         >
@@ -228,12 +237,11 @@ class SearchForm extends Component {
                                  <Option value="oi">Oi</Option>
                                  <Option value="oisu">oi (S.U.)</Option>
                                  <Option value="oiss">Oi Syllabified and Stressed</Option>
-
                               </Select>
                            )}
                         </FormItem>
                      </Col>
-                     <Col xs={12} sm={12} md={12} lg={12}>
+                     <Col span={12}>
 
                      </Col>
                   </Row>
