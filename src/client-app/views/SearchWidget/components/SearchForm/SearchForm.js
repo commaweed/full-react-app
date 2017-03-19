@@ -117,7 +117,8 @@ class SearchForm extends Component {
       const col1LabelProps = { span: 4, style: { marginLeft: 10} };
       const col2LabelProps = { span: 20, style: { marginLeft: -10} };
       const col1FieldProps = { span: 4 };
-      const col2FieldProps = { span: 17 };
+      const col2FieldProps = { xs: 14, sm: 15, md: 16, lg: 17 };
+      const btnGroupProps = { xs: 6, sm: 5, md: 4, lg: 3 };
 
       const me = this;
 
@@ -154,7 +155,7 @@ class SearchForm extends Component {
                      )}
                   </FormItem>
                </Col>
-               <Col span={2}>
+               <Col {...btnGroupProps}>
                   <FormItem  wrapperCol={{ span: 24 }}>
                      <Button.Group size="default">
                         <Button
