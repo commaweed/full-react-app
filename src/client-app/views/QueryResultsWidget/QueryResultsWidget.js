@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
+import Measure from 'react-measure';
 
 const columns = [{
    title: 'Name',
@@ -48,11 +49,11 @@ class QueryResultsWidget extends Component {
                dataSource={queryResults}
                showHeader={false}
                loading={fetching}
-               bodyStyle={{ backgroundColor: '#EEEEEE', overflowY: 'auto', maxHeight: 500 }}
+               bodyStyle={{ backgroundColor: '#EEEEEE', overflow: 'auto', maxHeight: 400 }}
                pagination={{ pageSize: 30 }}
+               styleName='table-styles'
             />
          </div>
-
       );
    }
 }
