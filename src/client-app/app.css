@@ -4,7 +4,6 @@ html, body, #root {
    height: 100%;
    margin: 0;
    padding: 0;
-   overflow: auto;
 }
 
 body {
@@ -19,11 +18,9 @@ body {
    font-size: 14px;
 }
 
-
-
 .results {
    overflow-y: auto;
-   height: 600px;
+   height: auto;
    background: grey;
 }
 

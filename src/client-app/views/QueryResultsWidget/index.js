@@ -5,5 +5,8 @@ import styles from './QueryResultsWidget.scss';
 import { connect } from "react-redux";
 
 export default connect((store) => {
-   return { queryResults: store.searchFormStore.queryResults }
+   return {
+      queryResults: store.searchFormStore.queryResults,
+      fetching: store.searchFormStore.fetching
+   }
 })(CSSModules(QueryResultsWidget, styles));

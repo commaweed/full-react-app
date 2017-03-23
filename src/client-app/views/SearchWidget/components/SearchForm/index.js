@@ -4,4 +4,8 @@ import styles from './SearchForm.scss';
 import { Form } from 'antd';
 import { connect } from "react-redux";
 
-export default connect()(Form.create()(CSSModules(SearchForm, styles)));
+export default connect((store) => {
+   return {
+      fetching: store.searchFormStore.fetching
+   }
+})(Form.create()(CSSModules(SearchForm, styles)));

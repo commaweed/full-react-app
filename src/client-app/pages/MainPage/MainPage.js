@@ -1,6 +1,6 @@
 import React from 'react'
-import { Layout} from 'antd';
-const { Header, Content} = Layout;
+import { Layout } from 'antd';
+const { Header, Content } = Layout;
 
 import Logo from '../../components/Logo';
 import SearchWidget from '../../views/SearchWidget';
@@ -14,7 +14,6 @@ const MainPage = () => (
          <SearchWidget/>
          <br/>
          <QueryResultsWidget/>
-         <div class="results"><i class="fa-bars">test</i></div>
       </Content>
    </Layout>
 );

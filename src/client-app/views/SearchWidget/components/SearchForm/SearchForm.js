@@ -118,7 +118,7 @@ class SearchForm extends Component {
    render() {
 
       const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue } = this.props.form;
-      const { isAdvancedForm } = this.props;
+      const { isAdvancedForm, fetching } = this.props;
 
       // Only show error after a field is touched.
       const colorFieldError = getPotentialError(FIELDS.colorField.name, this.props.form);
@@ -186,6 +186,8 @@ class SearchForm extends Component {
                            type="primary"
                            htmlType="submit"
                            disabled={hasErrors(getFieldsError())}
+                           loading={fetching}
+                           style={{ width: 100 }}
                         >
                            Submit
                         </Button>
