@@ -28,6 +28,9 @@ class QueryResultsWidget extends Component {
       //window.addEventListener('resize', this.remeasure);
    }
    componentWillReceiveProps(nextProps) {
+      console.log("before", this.resultsTable.scrollTop);
+      this.resultsTable.scrollTop = 0;
+      console.log("after", this.resultsTable.scrollTop);
       //if (!shallowEqual(this.props.domProps, nextProps.domProps) ||
       //   !shallowEqual(this.props.computedStyleProps, nextProps.computedStyleProps)) {
       //   this.remeasure();
@@ -45,6 +48,7 @@ class QueryResultsWidget extends Component {
 
          <div styleName="results-wrapper">
             <Table
+               ref={ (table) => { this.resultsTable = table; }}
                columns={columns}
                dataSource={queryResults}
                showHeader={false}

@@ -40,6 +40,17 @@ const cssLoader = {
    }
 };
 
+
+const theme = require('./antd-theme');
+console.log("Using theme:", theme);
+const lessLoader = {
+   loader: 'less-loader',
+   options: {
+      sourceMap: appProperties.isDebug,
+      modifyVars: theme
+   }
+};
+
 const postcssLoader = {
    loader: 'postcss-loader',
    options: {
@@ -79,7 +90,7 @@ module.exports = {
                   'transform-object-spread-inline',
                   ['import', {
                      libraryName: 'antd',
-                     style: 'css'
+                     style: true // true means use less or use 'css'
                   }]
                ]
             },
@@ -91,6 +102,15 @@ module.exports = {
                : ExtractTextPlugin.extract({
                   fallback: styleLoader,
                   loader: [ cssLoader, postcssLoader ],
+                  publicPath: appProperties.outputDirName
+               })
+         }, {
+            test: /\.less$/i,
+            use: appProperties.isDebug
+               ? [ styleLoader, cssLoader, lessLoader ]
+               : ExtractTextPlugin.extract({
+                  fallback: styleLoader,
+                  loader: [ cssLoader, lessLoader ],
                   publicPath: appProperties.outputDirName
                })
          }, {

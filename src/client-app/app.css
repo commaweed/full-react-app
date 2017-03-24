@@ -10,14 +10,6 @@ body {
    background-color: rgb(245,245,245);
 }
 
-:global(.ant-input) {
-   font-size: 14px;
-}
-
-:global(.ant-select) {
-   font-size: 14px;
-}
-
 .results {
    overflow-y: auto;
    height: auto;

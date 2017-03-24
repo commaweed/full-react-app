@@ -6,6 +6,7 @@ import { Layout, LocaleProvider } from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 
 import './app.css';
+//import {modifyVars} from 'less/dist/less.min.js';
 
 import store from "./app-redux/store";
 import MainPage from "./pages/MainPage";
