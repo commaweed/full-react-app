@@ -47,6 +47,7 @@ const lessLoader = {
    loader: 'less-loader',
    options: {
       sourceMap: appProperties.isDebug,
+      modules: true,
       modifyVars: theme
    }
 };
@@ -112,7 +113,8 @@ module.exports = {
                   fallback: styleLoader,
                   loader: [ cssLoader, lessLoader ],
                   publicPath: appProperties.outputDirName
-               })
+               }),
+            include: /antd/
          }, {
             test: /\.scss$/i,
             use: appProperties.isDebug

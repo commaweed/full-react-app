@@ -3,5 +3,5 @@ module.exports = {
    "@font-size-lg": "14px",
    "@text-color": "#333",
    "@primary-color": "#5C6BC0",
-   "@icon-url": "'http://get/icons/here'"
+   "@icon-url": '"/assets/fonts/iconfont/iconfont"'
 };
