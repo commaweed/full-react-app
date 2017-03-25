@@ -6,8 +6,21 @@ class ResultsPagination extends Component {
       super(props);
 
       this.state = {
-         currentPage: 1
+         currentPage: 1,
+         pageSize: 40
       };
+   }
+
+   getMaxCurrent(total) {
+      const { currentPage, pageSize } = this.state;
+      if ((currentPage - 1) * pageSize >= total) {
+         return Math.floor((total - 1) / pageSize) + 1;
+      }
+      return currentPage;
+   }
+
+   handlePageChange(current) {
+      this.setState({ currentPage: current});
    }
 
    render() {
@@ -19,10 +32,11 @@ class ResultsPagination extends Component {
             styleName="pagination"
             size="large"
             defaultCurrent={1}
-            current={1}
+            current={this.getMaxCurrent(queryResults.length)}
             total={queryResults.length}
             showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-            pageSize={40}
+            pageSize={this.state.pageSize}
+            onChange={this.handlePageChange.bind(this)}
          />
       );
    }
