@@ -45,7 +45,6 @@ class QueryResultsWidget extends Component {
       const { queryResults, fetching } = this.props;
 
       return (
-
          <div styleName="results-wrapper">
             <Table
                ref={ (table) => { this.resultsTable = table; }}
