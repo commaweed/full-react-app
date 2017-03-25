@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Table } from 'antd';
+import { Table, Spin } from 'antd';
 import Measure from 'react-measure';
+
+import ResultsPagination from './components/ResultsPagination';
 
 const columns = [{
    title: 'Name',
@@ -41,22 +43,25 @@ class QueryResultsWidget extends Component {
       //window.removeEventListener('resize', this.remeasure);
    }
 
+   //bodyStyle={{ backgroundColor: '#EEEEEE', overflow: 'auto', maxHeight: 400 }}
+   // styleName='table-styles'
    render() {
       const { queryResults, fetching } = this.props;
 
       return (
-         <div styleName="results-wrapper">
-            <Table
-               ref={ (table) => { this.resultsTable = table; }}
-               columns={columns}
-               dataSource={queryResults}
-               showHeader={false}
-               loading={fetching}
-               bodyStyle={{ backgroundColor: '#EEEEEE', overflow: 'auto', maxHeight: 400 }}
-               pagination={{ pageSize: 30 }}
-               styleName='table-styles'
-            />
-         </div>
+         <Spin spinning={fetching}>
+            <ResultsPagination />
+            <div styleName="results-wrapper" style={{ height: 500 }}>
+               <Table
+                  ref={ (table) => { this.resultsTable = table; }}
+                  columns={columns}
+                  dataSource={queryResults}
+                  showHeader={ false }
+                  pagination={ false }
+                  loading={ false}
+               />
+            </div>
+         </Spin>
       );
    }
 }

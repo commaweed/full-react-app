@@ -5,11 +5,11 @@ export function submitQuery(query) {
    console.log('Submitting Query values', query);
 
    const data = [];
-   for (let i = 0; i < 46; i++) {
+   for (let i = 0; i < 222; i++) {
       data.push({
          key: i,
          name: `Edward King ${i}`,
-         age: 32,
+         age: 32 + i,
          address: `London, Park Lane no. ${i}`,
       });
    }
