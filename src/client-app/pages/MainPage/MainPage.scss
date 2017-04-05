@@ -1,23 +1,23 @@
-.header {
-   background-color:  #5C6BC0;
-   height: 64px;
+.wrapper {
    width: 100%;
-   position: fixed;
-   border-bottom: none !important;
-   box-shadow:
-      0 2px 2px 0 rgba(0,0,0,0.14),
-      0 3px 1px -2px rgba(0,0,0,0.2),
-      0 1px 5px 0 rgba(0,0,0,0.12);
-   z-index: 1000;
+   height: 100%;
+   overflow: hidden;
+
+   /* for the children */
+   display: flex;
+   flex-direction: column;
 }
 
 .content {
-   padding: 0 10px 20px 10px;
-   background: white;
-   position:absolute;
-   left: 0;
-   right: 0;
-   top: 64px;
-   bottom: 75px;
+   width: 100%;
+   height: 100%;
+   padding: 0 10px 5px 10px;
+   background-color: white;
    overflow: hidden;
+
+   flex: 1;
+
+   /* for the children */
+   display: flex;
+   flex-direction: column;
 }

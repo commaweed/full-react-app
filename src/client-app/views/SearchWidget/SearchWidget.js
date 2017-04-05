@@ -46,18 +46,20 @@ class SearchWidget extends Component {
       );
 
       return(
-         <Collapse
-            activeKey={ this.state.isCollapsed ? [] : ["1"] }
-            onChange={this.onCollapseClick.bind(this)}
-         >
-            <Panel
-               header={header}
-               key="1"
-               onClick={this.onCollapseClick.bind(this)}
+         <div styleName="wrapper">
+            <Collapse
+               activeKey={ this.state.isCollapsed ? [] : ["1"] }
+               onChange={this.onCollapseClick.bind(this)}
             >
-               <SearchForm isAdvancedForm={this.state.isAdvancedForm}/>
-            </Panel>
-         </Collapse>
+               <Panel
+                  header={header}
+                  key="1"
+                  onClick={this.onCollapseClick.bind(this)}
+               >
+                  <SearchForm isAdvancedForm={this.state.isAdvancedForm}/>
+               </Panel>
+            </Collapse>
+         </div>
       );
    }
 }

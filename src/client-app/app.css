@@ -1,25 +1,15 @@
-html, body, #root {
+html, body, #root, #app {
    display: block;
    width: 100%;
    height: 100%;
    margin: 0;
    padding: 0;
+   overflow: hidden;
 }
 
 body {
    background-color: rgb(245,245,245);
 }
-
-.results {
-   overflow-y: auto;
-   height: auto;
-   background: grey;
-}
-
-/*:global(.ant-select-arrow::before) {
-   content: '\f078'; !*fa-chevron-down*!
-   font-family: "FontAwesome" !important;
-}*/
 
 /*
 @font-face {

@@ -49,19 +49,25 @@ class QueryResultsWidget extends Component {
       const { queryResults, fetching } = this.props;
 
       return (
-         <Spin spinning={fetching}>
-            <ResultsPagination />
-            <div styleName="results-wrapper" style={{ height: 500 }}>
-               <Table
-                  ref={ (table) => { this.resultsTable = table; }}
-                  columns={columns}
-                  dataSource={queryResults}
-                  showHeader={ false }
-                  pagination={ false }
-                  loading={ false}
-               />
+         <div styleName="wrapper">
+            <div styleName="pagination-wrapper">
+               <Spin spinning={fetching} size="small">
+                  <ResultsPagination/>
+               </Spin>
             </div>
-         </Spin>
+            <div styleName="results-wrapper">
+               <Spin spinning={fetching} size="large">
+                  <Table
+                     ref={ (table) => { this.resultsTable = table; }}
+                     columns={columns}
+                     dataSource={queryResults}
+                     showHeader={ false }
+                     pagination={ false }
+                     loading={ false}
+                  />
+               </Spin>
+            </div>
+         </div>
       );
    }
 }
