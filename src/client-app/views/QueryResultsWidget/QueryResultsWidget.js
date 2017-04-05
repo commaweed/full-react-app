@@ -24,27 +24,13 @@ class QueryResultsWidget extends Component {
       };
    }
 
-   componentDidMount() {
-      //this.remeasure();
-      //this.remeasure.flush();
-      //window.addEventListener('resize', this.remeasure);
-   }
    componentWillReceiveProps(nextProps) {
-      console.log("before", this.resultsTable.scrollTop);
-      this.resultsTable.scrollTop = 0;
-      console.log("after", this.resultsTable.scrollTop);
-      //if (!shallowEqual(this.props.domProps, nextProps.domProps) ||
-      //   !shallowEqual(this.props.computedStyleProps, nextProps.computedStyleProps)) {
-      //   this.remeasure();
-      //}
-   }
-   componentWillUnmount() {
-      //this.remeasure.cancel();
-      //window.removeEventListener('resize', this.remeasure);
+      // reset the scroll bar to position 0 
+      if (this.resultsWrapper && this.resultsWrapper.scrollTop !== 0) {
+         this.resultsWrapper.scrollTop = 0;
+      }
    }
 
-   //bodyStyle={{ backgroundColor: '#EEEEEE', overflow: 'auto', maxHeight: 400 }}
-   // styleName='table-styles'
    render() {
       const { queryResults, fetching } = this.props;
 
@@ -55,10 +41,9 @@ class QueryResultsWidget extends Component {
                   <ResultsPagination/>
                </Spin>
             </div>
-            <div styleName="results-wrapper">
+            <div styleName="results-wrapper" ref={ (wrapper) => { this.resultsWrapper = wrapper; }}>
                <Spin spinning={fetching} size="large">
                   <Table
-                     ref={ (table) => { this.resultsTable = table; }}
                      columns={columns}
                      dataSource={queryResults}
                      showHeader={ false }
