@@ -25,8 +25,8 @@ class QueryResultsWidget extends Component {
    }
 
    componentWillReceiveProps(nextProps) {
-      // reset the scroll bar to position 0 
-      if (this.resultsWrapper && this.resultsWrapper.scrollTop !== 0) {
+      // if new query, reset the scroll bar to position 0
+      if (nextProps.fetching === true && this.resultsWrapper && this.resultsWrapper.scrollTop !== 0) {
          this.resultsWrapper.scrollTop = 0;
       }
    }
