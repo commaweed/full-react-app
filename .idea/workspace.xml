@@ -4,9 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/client-app/views/SearchWidget/SearchWidget.js" line="49" mnemonic="0" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a79d98e-423a-48ff-a1ba-4412e5480c08" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client-app/views/QueryResultsWidget/QueryResultsWidget.js" afterPath="$PROJECT_DIR$/src/client-app/views/QueryResultsWidget/QueryResultsWidget.js" />
-    </list>
+    <list default="true" id="7a79d98e-423a-48ff-a1ba-4412e5480c08" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -1264,7 +1262,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="180456000" />
+    <option name="totallyTimeSpent" value="181048000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
