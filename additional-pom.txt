@@ -1,0 +1,166 @@
+
+<name>${project.artifactId} [${project.packaging} : ${project.version}]</name>
+
+<timestamp>${maven.build.timestamp}</timestamp>
+<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+<property.filters.dir>${project.basedir}/properties/filters</property.filters.dir>
+<property.input.dir>${project.basedir}/properties/source</property.input.dir>
+<property.finaloutput.dir>${project.build.directory}/properties</property.finaloutput.dir>
+
+<dev.property.file.name>development</dev.property.file.name>
+<prod.property.file.name>production</prod.property.file.name>
+
+<profiles>
+
+    <profile>
+        <id>env-dev</id>
+        <activation>
+            <property>
+                <name>env</name>
+                <value>dev</value>
+            </property>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <profile.npm.argument>build-dev</profile.npm.argument>
+            <profile.property.env.name>${dev.property.file.name}</profile.property.env.name>
+        </properties>
+    </profile>
+    
+    <profile>
+        <id>env-dev</id>
+        <activation>
+            <property>
+                <name>env</name>
+                <value>prod</value>
+            </property>
+        </activation>
+        <properties>
+            <profile.npm.argument>build-prod</profile.npm.argument>
+            <profile.property.env.name>${prod.property.file.name}</profile.property.env.name>
+        </properties>
+    </profile>    
+
+    <profile>
+        <id>env-no-client-dev</id>
+        <activation>
+            <property>
+                <name>env</name>
+                <value>noclient</value>
+            </property>
+        </activation>
+        <properties>
+            <profile.npm.argument></profile.npm.argument>
+            <profile.property.env.name>${dev.property.file.name}</profile.property.env.name>
+        </properties>
+    </profile>
+</profiles>
+
+.. in plugins
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefile-plugin</artifactId>
+    <version>2.19.1</version>
+    <configuration>
+        <includes>
+            <include>**/*Test.java</include>
+            <include>**/*Spec.groovy</include>
+        </includes>
+        <excludes>
+            <exclude>**/integration/**/*.java</exclude>
+            <exclude>**/integration/**/*.groovy</exclude>
+        </excludes>        
+    </configuration>
+</plugin>
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-resources-plugin</artifactId>
+    <version>3.0.2</version>
+    <executions>
+        <execution>
+            <id>create-and-copy-development-propertyfile</id>
+            <phase>generate-sources</phase>
+            <goals>
+                <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+                <filters>
+                    <filter>${property.filters.dir}/${prod.property.file.name}.filters</filter>
+                    <filter>${property.filters.dir}/${dev.property.file.name}.filters</filter>
+                </filters>
+                <resources>
+                    <resource>
+                        <directory>${property.input.dir}</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+                <outputDirectory>${property.finalOutput.dir}/${dev.property.file.name}</outputDirectory>
+            </configuration>
+        </execution>
+        <execution>
+            <id>create-and-copy-production-propertyfile</id>
+            <phase>generate-sources</phase>
+            <goals>
+                <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+                <filters>
+                    <filter>${property.filters.dir}/${prod.property.file.name}.filters</filter>
+                </filters>
+                <resources>
+                    <resource>
+                        <directory>${property.input.dir}</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+                <outputDirectory>${property.finalOutput.dir}/${prod.property.file.name}</outputDirectory>
+            </configuration>
+        </execution>        
+    </executions>
+    
+</plugin>
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-war-plugin</artifactId>
+    <version>3.0.0</version>
+    <configuration>
+        <webResources>
+            <resource>
+                <directory>${project.build.directory}/client-app</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.*</include>
+                    </includes>
+            </resource>
+        </webResources>
+    </configuration>
+</plugin>
+
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>exec-maven-plugin</artifactId>
+    <version>1.5.0</version>
+    <executions>
+        <execution>
+            <id>npm build</id>
+            <phase>compile</phase>
+            <goals>
+                <goal>exec</goal>
+            </goals>
+            <configuration>
+                <workingDirectory>${project.basedir}</workingDirectory>
+                <executable>npm</executable>
+                <arguments>
+                    <argument>run</argument>
+                    <argument>${profile.npm.argument}</argument>
+                </arguments>
+            </configuration>            
+        </execution>
+    </executions>
+
+</plugin>
