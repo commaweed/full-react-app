@@ -6,8 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_ENV=development webpack-dev-server --content-base app --inline --hot  --port 8082",
+    "dev-work": "cross-env NODE_ENV=development webpack-dev-server --content-base src/client-app --inline --hot  --port 8082",
     "build-dev": "rimraf dist && NODE_ENV=development webpack --display-error-details --colors --progress --config webpack.config.js",
+    "build-dev-work": "rimraf target/client-app && cross-env NODE_ENV=development webpack --display-error-details --colors --progress --profile --config webpack.config.js",
     "build-prod": "rimraf dist && NODE_ENV=production webpack --display-error-details --colors --progress --config webpack.config.js",
+    "build-prod-work": "rimraf target/client-app && cross-env NODE_ENV=production webpack --display-error-details --colors --progress --profile --config webpack.config.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -52,6 +55,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.23.0",
+    "cross-env": "^3.2.4",
     "css-loader": "^0.26.2",
     "cssnano": "^3.10.0",
     "extract-text-webpack-plugin": "^2.0.0",
