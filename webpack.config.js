@@ -7,6 +7,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // common application properties
 const appProperties = new (function() {
    this.isDebug = process.env.NODE_ENV !== "production";
+   
+   this.currentDirectory = __dirname;
+   this.appDirName = "client-app";
+   this.appFileName = "app";
+   this.contextDirectory = path.resolve(this.currentDirectory, "src");
+   this.inputDirectory = path.resolve(this.currentDirectory, this.appDirName);
+   this.outputDirectory = path.resolve(this.currentDirectory, "target", this.appDireName);
+   
    this.appName = 'app';
    this.appFile = './' + this.appName + '.js';
    this.inputDirName = 'client-app';
@@ -15,6 +23,70 @@ const appProperties = new (function() {
    this.inputBaseDir = path.resolve(__dirname, 'src', this.inputDirName);
    this.outputBaseDir = path.resolve(__dirname, this.outputDirName);
 })();
+
+/**
+* Formats the given name which can be used in files, data URIs, etc.  It is dependent upon the environment.
+* @param name A formatted name according to the underlying environment.
+* @returns {String}
+*/
+function formatName(name) {
+   // hashing is good for cache busting
+   return appProperties.isDebug === true ? name : name + '-[hash:12]';
+}
+
+/**
+* Creates the plugins that are needed by webpack according to the environment.
+*/
+function createPlugins() {
+   var plugins = [
+      new webpack.optimize.CommonsChunkPlugin({
+         name: 'vendor',
+         minChunks: function(module) {
+            // assumes vendor imports exist in node_modules directory
+            return module.context && module.context.indexOf('node_modules') !== -1;
+         }
+      }),
+      new HtmlWebpackPlugin({
+         template: path.resolve(appProperties.currentDirectory, 'page-template.html'),
+         filename: 'index.html',
+         hash: true,
+         minify: {
+            collapseWhitespace: !appProperties.isDebug,
+            removeComments: !appProperties.isDebug,
+            useShortDocType: !appProperties.isDebug
+         }
+      }),
+      new ExtractTextPlugin({
+         filename: appProperties.appFileName + ".bundle.css",
+         disable: false,
+         allChunks: true // todo: set to false?
+      }),
+      new OptimizeCssAssetsPlugin({
+         assetNameRegExp: /\.s?css$/g,
+         cssProcessor: require('cssnano'),
+         cssProcessorOptions: {
+            discardComments: {
+               removeAll: !appProperties.isDebug
+            }
+         },
+         canPrint: true
+      })      
+   ];
+   
+   if (appProperties.isDebug) {
+      // add development specific 
+   } else {
+      plugins.push(new webpack.optimize.UglifyJsPlugin({
+         beautify: false,
+         sourceMap: false,
+         comments: false,
+         mangle: true,
+         compress: true
+      }));
+   }
+   
+   return plugins;
+}
 
 const styleLoader = {
    loader: 'style-loader',
@@ -26,10 +98,10 @@ const styleLoader = {
 const scssLoader = {
    loader: 'css-loader',
    options: {
-      modules: true,
+      modules: true, 
       importLoader: 1,
       sourceMap: appProperties.isDebug,
-      localIdentName: '[path]__[name]__[local]__[hash:5]'
+      localIdentName: '[path]__[name]__[local]__[hash:5]' // hash:base64:5 at work
    },
 };
 
@@ -39,7 +111,6 @@ const cssLoader = {
       sourceMap: appProperties.isDebug
    }
 };
-
 
 const theme = require('./antd-theme');
 console.log("Using theme:", theme);
@@ -68,6 +139,7 @@ const postcssLoader = {
 module.exports = {
    devtool: appProperties.isDebug ? "eval-source-map" : false, // inline-source-map source-map eval eval-source-map
    context: appProperties.inputBaseDir,
+   // entry: [ 'bable-polyfill', path.resolve(appProperties.inputDirectory, appProperties.appFileName + ".js") ],
    entry: appProperties.appFile,
    output: {
       path: appProperties.outputBaseDir,
@@ -94,6 +166,7 @@ module.exports = {
                      style: true // true means use less or use 'css'
                   }]
                ]
+               // , babelrc: false
             },
             include: appProperties.inputBaseDir
          }, {
@@ -122,7 +195,7 @@ module.exports = {
                : ExtractTextPlugin.extract({
                   fallback: styleLoader,
                   loader: [ scssLoader, postcssLoader ],
-                  publicPath: appProperties.outputDirName
+                  publicPath: appProperties.outputDirName  // appProperties.outputDirectory (the rest have same)
                })
          }, {
             test : /\.png$/,
@@ -145,6 +218,7 @@ module.exports = {
          }
       ]
    },
+   // plugins: createPlugins()
    plugins: [
       new webpack.optimize.CommonsChunkPlugin({
          name: 'vendor',
